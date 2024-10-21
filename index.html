@@ -15,11 +15,13 @@
 
     <div id="content" style="display:none;">
         <h2>Welcome!</h2>
-        <h3>Available PDFs:</h3>
-        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_1" width="600" height="400"></iframe>
-        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_2" width="600" height="400"></iframe>
-        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_3" width="600" height="400"></iframe>
-        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_4" width="600" height="400"></iframe>
+        <div>
+            <button onclick="loadPDF('pdf1')">Load PDF 1</button>
+            <button onclick="loadPDF('pdf2')">Load PDF 2</button>
+            <button onclick="loadPDF('pdf3')">Load PDF 3</button>
+            <button onclick="loadPDF('pdf4')">Load PDF 4</button>
+        </div>
+        <iframe id="pdfFrame" width="600" height="400" frameborder="0"></iframe>
         <button id="logout-button">Logout</button>
     </div>
 
@@ -41,8 +43,6 @@
             fetch('https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + accessToken)
                 .then(response => response.json())
                 .then(user => {
-                    console.log(user); // Log the entire user object for debugging
-                    // Remove the email check, allowing all users to access
                     document.getElementById("login-container").style.display = "none";
                     document.getElementById("content").style.display = "block";
                 })
@@ -54,6 +54,11 @@
         document.getElementById("logout-button").onclick = function() {
             window.location.href = REDIRECT_URI; // Redirect to logout
         };
+
+        function loadPDF(pdfType) {
+            const scriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?type=' + pdfType; // Replace with your script URL
+            document.getElementById("pdfFrame").src = scriptUrl; // Load the PDF in the iframe
+        }
     </script>
 </body>
 </html>
