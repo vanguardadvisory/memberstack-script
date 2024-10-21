@@ -25,7 +25,6 @@
         const CLIENT_ID = '368441345753-oljn46dcj2cfc123ahd4sk4va3skbjd2.apps.googleusercontent.com'; // Replace with your Google Client ID
         const REDIRECT_URI = 'https://vanguardadvisory.github.io/memberstack-script/'; // Replace with your GitHub Pages URL
         const SCOPES = 'email profile';
-        const WHITELISTED_EMAIL = 'user123@gmail.com';
 
         document.getElementById("login-button").onclick = function() {
             const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
