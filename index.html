@@ -15,12 +15,6 @@
 
     <div id="content" style="display:none;">
         <h2>Welcome!</h2>
-        <div>
-            <button onclick="loadPDF('pdf1')">Load PDF 1</button>
-            <button onclick="loadPDF('pdf2')">Load PDF 2</button>
-            <button onclick="loadPDF('pdf3')">Load PDF 3</button>
-            <button onclick="loadPDF('pdf4')">Load PDF 4</button>
-        </div>
         <iframe id="pdfFrame" width="600" height="400" frameborder="0"></iframe>
         <button id="logout-button">Logout</button>
     </div>
@@ -43,8 +37,16 @@
             fetch('https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + accessToken)
                 .then(response => response.json())
                 .then(user => {
-                    document.getElementById("login-container").style.display = "none";
-                    document.getElementById("content").style.display = "block";
+                    // Check for whitelisted email
+                    if (user.email) {
+                        document.getElementById("login-container").style.display = "none";
+                        document.getElementById("content").style.display = "block";
+
+                        // Load the Google Apps Script to display PDFs
+                        loadPDFs();
+                    } else {
+                        document.getElementById("error-message").innerText = "Unauthorized access!";
+                    }
                 })
                 .catch(error => {
                     document.getElementById("error-message").innerText = error.message;
@@ -55,9 +57,9 @@
             window.location.href = REDIRECT_URI; // Redirect to logout
         };
 
-        function loadPDF(pdfType) {
-            const scriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?type=' + pdfType; // Replace with your script URL
-            document.getElementById("pdfFrame").src = scriptUrl; // Load the PDF in the iframe
+        function loadPDFs() {
+            const scriptUrl = 'https://script.google.com/a/macros/vanguardadvisory.org/s/AKfycbx9acPuVjujym2A8iY1p3Sj-Y_cv7H2R7kuShm8lKSQSR7tr24XZUbz3AMMxetK8eLG2g/exec'; // Replace with your script URL
+            document.getElementById("pdfFrame").src = scriptUrl; // Load the PDFs in the iframe
         }
     </script>
 </body>
