@@ -3,50 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Login</title>
-    <!-- Import Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Client Login</h1>
     <div id="login-container">
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button id="login-button">Login</button>
-        <p id="error-message"></p>
+        <h2>Login</h2>
+        <a id="login-button" href="#">Login with Google</a>
+        <div id="error-message"></div>
     </div>
+
+    <div id="content" style="display:none;">
+        <h2>Welcome!</h2>
+        <iframe src="https://drive.google.com/embeddedfolderview?id=YOUR_FOLDER_ID#grid" width="600" height="400"></iframe>
+        <iframe src="YOUR_PDF_URL" width="600" height="400"></iframe>
+        <div id="gqueue-tasks"></div>
+        <button id="logout-button">Logout</button>
+    </div>
+
     <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCA8xakN_PVv_CKMeok_OVJnXHi2g5L3cc",
-            authDomain: "vanguard-advisory.firebaseapp.com",
-            projectId: "vanguard-advisory",
-            storageBucket: "vanguard-advisory.appspot.com",
-            messagingSenderId: "544665485946",
-            appId: "1:544665485946:web:0cd6805c58e92b53da71c3",
-            measurementId: "G-R2FLHRMCG1
+        const CLIENT_ID = 'YOUR_CLIENT_ID'; // Replace with your Google Client ID
+        const REDIRECT_URI = 'https://<your-username>.github.io/<your-repo-name>/'; // Replace with your GitHub Pages URL
+        const SCOPES = 'email profile';
+        const WHITELISTED_EMAIL = 'user123@gmail.com';
+
+        document.getElementById("login-button").onclick = function() {
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
+            window.location.href = authUrl;
         };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+        // Check for access token in URL
+        const urlParams = new URLSearchParams(window.location.hash.substr(1));
+        const accessToken = urlParams.get('access_token');
 
-        // Login Functionality
-        document.getElementById("login-button").addEventListener("click", function() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Successfully signed in
-                    window.location.href = "client-resources.html"; // Redirect to resources page
+        if (accessToken) {
+            fetch('https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + accessToken)
+                .then(response => response.json())
+                .then(user => {
+                    if (user.email === WHITELISTED_EMAIL) {
+                        document.getElementById("login-container").style.display = "none";
+                        document.getElementById("content").style.display = "block";
+                        loadGQueueTasks(); // Call function to load GQueue tasks
+                    } else {
+                        document.getElementById("error-message").innerText = "Unauthorized access!";
+                    }
                 })
-                .catch((error) => {
-                    const errorMessage = error.message;
-                    document.getElementById("error-message").innerText = errorMessage;
+                .catch(error => {
+                    document.getElementById("error-message").innerText = error.message;
                 });
-        });
+        }
+
+        document.getElementById("logout-button").onclick = function() {
+            window.location.href = REDIRECT_URI; // Redirect to logout
+        };
+
+        function loadGQueueTasks() {
+            // Fetch tasks from GQueue and display them here
+            // This is a placeholder function; implement your logic to get tasks.
+            document.getElementById("gqueue-tasks").innerText = "Tasks from GQueue will appear here.";
+        }
     </script>
 </body>
 </html>
