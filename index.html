@@ -15,9 +15,11 @@
 
     <div id="content" style="display:none;">
         <h2>Welcome!</h2>
-        <iframe src="https://drive.google.com" width="600" height="400"></iframe>
-        <iframe src="YOUR_PDF_URL" width="600" height="400"></iframe>
-        <div id="gqueue-tasks"></div>
+        <h3>Available PDFs:</h3>
+        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_1" width="600" height="400"></iframe>
+        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_2" width="600" height="400"></iframe>
+        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_3" width="600" height="400"></iframe>
+        <iframe src="YOUR_WEB_APP_URL?type=pdf&url=PDF_URL_4" width="600" height="400"></iframe>
         <button id="logout-button">Logout</button>
     </div>
 
@@ -43,7 +45,6 @@
                     // Remove the email check, allowing all users to access
                     document.getElementById("login-container").style.display = "none";
                     document.getElementById("content").style.display = "block";
-                    loadGQueueTasks(); // Call function to load GQueue tasks
                 })
                 .catch(error => {
                     document.getElementById("error-message").innerText = error.message;
@@ -53,12 +54,6 @@
         document.getElementById("logout-button").onclick = function() {
             window.location.href = REDIRECT_URI; // Redirect to logout
         };
-
-        function loadGQueueTasks() {
-            // Fetch tasks from GQueue and display them here
-            // This is a placeholder function; implement your logic to get tasks.
-            document.getElementById("gqueue-tasks").innerText = "Tasks from GQueue will appear here.";
-        }
     </script>
 </body>
 </html>
