@@ -1,2 +1,52 @@
-<!-- Memberstack webflow package -->
-<script data-memberstack-app="app_cm2i5hham00200ssf08l73a86" src="https://static.memberstack.com/scripts/v1/memberstack.js" type="text/javascript"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Login</title>
+    <!-- Import Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+</head>
+<body>
+    <h1>Client Login</h1>
+    <div id="login-container">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button id="login-button">Login</button>
+        <p id="error-message"></p>
+    </div>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCA8xakN_PVv_CKMeok_OVJnXHi2g5L3cc",
+            authDomain: "vanguard-advisory.firebaseapp.com",
+            projectId: "vanguard-advisory",
+            storageBucket: "vanguard-advisory.appspot.com",
+            messagingSenderId: "544665485946",
+            appId: "1:544665485946:web:0cd6805c58e92b53da71c3",
+            measurementId: "G-R2FLHRMCG1
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Login Functionality
+        document.getElementById("login-button").addEventListener("click", function() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Successfully signed in
+                    window.location.href = "client-resources.html"; // Redirect to resources page
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    document.getElementById("error-message").innerText = errorMessage;
+                });
+        });
+    </script>
+</body>
+</html>
